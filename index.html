@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You ❤️</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: linear-gradient(120deg, #ff758c, #ff7eb3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Segoe UI', sans-serif;
+        overflow: hidden;
+        color: white;
+        text-align: center;
+    }
+
+    .container {
+        z-index: 2;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2.2em;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 1.2em;
+        min-height: 60px;
+    }
+
+    .heart {
+        width: 60px;
+        height: 60px;
+        background: red;
+        position: relative;
+        transform: rotate(-45deg);
+        margin: 30px auto;
+        animation: beat 1s infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+        content: '';
+        width: 60px;
+        height: 60px;
+        background: red;
+        border-radius: 50%;
+        position: absolute;
+    }
+
+    .heart::before {
+        top: -30px;
+        left: 0;
+    }
+
+    .heart::after {
+        left: 30px;
+        top: 0;
+    }
+
+    @keyframes beat {
+        0%, 100% { transform: scale(1) rotate(-45deg); }
+        50% { transform: scale(1.2) rotate(-45deg); }
+    }
+
+    .floating-heart {
+        position: absolute;
+        bottom: -20px;
+        font-size: 20px;
+        animation: floatUp 6s linear infinite;
+        opacity: 0.8;
+    }
+
+    @keyframes floatUp {
+        0% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-110vh);
+            opacity: 0;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Hi my love ❤️</h1>
+    <div class="heart"></div>
+    <p id="text"></p>
+</div>
+
+<script>
+    const messages = [
+        "Miles apart, but my heart stays with you.",
+        "Distance tested us… and we passed.",
+        "Even as an engineer, I can’t calculate how much I love you.",
+        "Every day, I choose you.",
+        "Happy Valentine’s Day ❤️"
+    ];
+
+    let index = 0;
+    let char = 0;
+    const textElement = document.getElementById("text");
+
+    function typeText() {
+        if (char < messages[index].length) {
+            textElement.textContent += messages[index].charAt(char);
+            char++;
+            setTimeout(typeText, 50);
+        } else {
+            setTimeout(() => {
+                textElement.textContent = "";
+                char = 0;
+                index = (index + 1) % messages.length;
+                typeText();
+            }, 1800);
+        }
+    }
+
+    typeText();
+
+    function createHeart() {
+        const heart = document.createElement("div");
+        heart.classList.add("floating-heart");
+        heart.innerHTML = "❤️";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (4 + Math.random() * 3) + "s";
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 7000);
+    }
+
+    setInterval(createHeart, 500);
+</script>
+
+</body>
+</html>
