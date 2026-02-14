@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Will You Be My Valentine?</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -16,25 +16,19 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            min-height: 100dvh; /* Dynamic viewport height for mobile */
+            min-height: 100dvh;
+            min-height: -webkit-fill-available;
             overflow-x: hidden;
             background: #0f0c29;
             background: linear-gradient(to bottom, #240b36, #c31432);
             font-family: 'Playfair Display', serif;
             touch-action: manipulation;
+            -webkit-text-size-adjust: 100%;
         }
 
         @keyframes float {
             0% { transform: translateY(0px) rotate(0deg); opacity: 1; }
             100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-        }
-
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            14% { transform: scale(1.3); }
-            28% { transform: scale(1); }
-            42% { transform: scale(1.3); }
-            70% { transform: scale(1); }
         }
 
         @keyframes fadeIn {
@@ -52,6 +46,11 @@
             50% { transform: rotate(2deg); }
         }
 
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
         .heart {
             position: absolute;
             bottom: -50px;
@@ -63,7 +62,7 @@
 
         .flower {
             position: absolute;
-            font-size: 2rem;
+            font-size: 1.5rem;
             opacity: 0;
             transition: all 1s ease-out;
             z-index: 10;
@@ -71,11 +70,11 @@
         }
 
         .btn-hover {
-            transition: all 0.3s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         
         .btn-hover:active {
-            transform: scale(0.95);
+            transform: scale(0.92);
         }
 
         .glass-panel {
@@ -83,8 +82,8 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            width: 92%;
-            max-width: 600px;
+            width: 90%;
+            max-width: 500px;
             margin: 0 auto;
         }
 
@@ -100,7 +99,7 @@
 
         .message-text {
             font-family: 'Dancing Script', cursive;
-            line-height: 1.6;
+            line-height: 1.5;
         }
         
         .title-font {
@@ -109,35 +108,80 @@
 
         .bouquet-container {
             position: relative;
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 15px;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 12px;
             animation: sway 3s ease-in-out infinite;
         }
 
         .bouquet-emoji {
-            font-size: 100px;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+            font-size: 80px;
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+            line-height: 1;
         }
 
         .sparkle {
             position: absolute;
             color: #ffd700;
-            font-size: 16px;
+            font-size: 14px;
             animation: float 2s linear infinite;
         }
 
-        /* Mobile-specific adjustments */
-        @media (max-width: 640px) {
+        /* iPhone SE / Mini */
+        @media (max-width: 375px) {
             .glass-panel {
-                padding: 1.5rem !important;
-                border-radius: 1.5rem !important;
+                padding: 1.25rem !important;
+                border-radius: 1.25rem !important;
             }
             
             .glass-panel h2 {
+                font-size: 1.75rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+            
+            .message-text p {
+                font-size: 1rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            
+            .message-text p:last-child {
+                font-size: 1.25rem !important;
+                margin-top: 0.75rem !important;
+            }
+            
+            #page-question h1 {
                 font-size: 2.25rem !important;
-                line-height: 1.2 !important;
-                margin-bottom: 1rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+            
+            .bouquet-container {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .bouquet-emoji {
+                font-size: 65px;
+            }
+            
+            .btn-yes {
+                font-size: 1.125rem !important;
+                padding: 0.625rem 1.5rem !important;
+            }
+            
+            .btn-no {
+                font-size: 0.875rem !important;
+                padding: 0.5rem 1rem !important;
+            }
+        }
+
+        /* iPhone 12/13/14/15 Pro */
+        @media (min-width: 376px) and (max-width: 393px) {
+            .glass-panel {
+                padding: 1.5rem !important;
+            }
+            
+            .glass-panel h2 {
+                font-size: 2rem !important;
             }
             
             .message-text p {
@@ -149,76 +193,64 @@
             }
             
             #page-question h1 {
-                font-size: 3rem !important;
-                line-height: 1.2 !important;
-                margin-bottom: 2rem !important;
+                font-size: 2.5rem !important;
+            }
+        }
+
+        /* iPhone 12/13/14/15 Pro Max */
+        @media (min-width: 394px) and (max-width: 430px) {
+            .glass-panel {
+                padding: 1.75rem !important;
             }
             
-            .btn-hover {
-                font-size: 1.25rem !important;
-                padding: 0.75rem 1.5rem !important;
+            .glass-panel h2 {
+                font-size: 2.25rem !important;
             }
             
-            #no-btn {
-                font-size: 1rem !important;
-                padding: 0.5rem 1rem !important;
+            #page-question h1 {
+                font-size: 2.75rem !important;
+            }
+        }
+
+        /* General mobile optimizations */
+        @media (max-width: 430px) {
+            .glass-panel {
+                border-radius: 1.5rem !important;
             }
             
             .decorative-corner {
-                width: 40px !important;
-                height: 40px !important;
+                width: 32px !important;
+                height: 32px !important;
+                border-width: 3px !important;
+            }
+            
+            .btn-container {
+                gap: 0.75rem !important;
+            }
+            
+            .btn-yes {
+                min-height: 44px;
+                font-size: 1.25rem;
+                padding: 0.75rem 1.75rem;
+                border-radius: 9999px;
+            }
+            
+            .btn-no {
+                min-height: 40px;
+                font-size: 1rem;
+                padding: 0.625rem 1.25rem;
+                border-radius: 9999px;
             }
         }
 
-        /* Small phones */
-        @media (max-width: 380px) {
-            .bouquet-container {
-                width: 120px;
-                height: 120px;
+        /* iPhone notch handling */
+        @supports (padding-top: env(safe-area-inset-top)) {
+            .safe-area-top {
+                padding-top: env(safe-area-inset-top);
             }
             
-            .bouquet-emoji {
-                font-size: 80px;
-            }
-            
-            #page-question h1 {
-                font-size: 2.5rem !important;
-            }
-            
-            .glass-panel h2 {
-                font-size: 1.875rem !important;
-            }
-        }
-
-        /* Landscape mode on mobile */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .bouquet-container {
-                width: 100px;
-                height: 100px;
-                margin-bottom: 10px;
-            }
-            
-            .bouquet-emoji {
-                font-size: 70px;
-            }
-            
-            .glass-panel {
-                padding: 1rem !important;
-            }
-            
-            .glass-panel h2 {
-                font-size: 1.5rem !important;
-                margin-bottom: 0.5rem !important;
-            }
-            
-            .message-text p {
-                font-size: 0.875rem !important;
-                margin-bottom: 0.5rem !important;
-            }
-            
-            #page-question h1 {
-                font-size: 2rem !important;
-                margin-bottom: 1rem !important;
+            .safe-area-bottom {
+                padding-bottom: env(safe-area-inset-bottom);
             }
         }
 
@@ -228,12 +260,12 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+            -webkit-touch-callout: none;
         }
 
-        /* Better touch targets */
-        button {
-            min-height: 44px;
-            min-width: 44px;
+        /* Smooth scrolling */
+        .scroll-smooth {
+            -webkit-overflow-scrolling: touch;
         }
     </style>
 </head>
@@ -243,18 +275,18 @@
     <div id="hearts-container" class="fixed inset-0 pointer-events-none overflow-hidden"></div>
 
     <!-- PAGE 1: THE QUESTION -->
-    <div id="page-question" class="fixed inset-0 flex flex-col items-center justify-center z-20 transition-opacity duration-700 px-4">
-        <div class="text-center w-full max-w-2xl">
-            <h1 class="text-5xl sm:text-6xl md:text-8xl mb-8 md:mb-12 title-font text-pink-200 drop-shadow-lg animate-pulse px-2">
+    <div id="page-question" class="fixed inset-0 flex flex-col items-center justify-center z-20 transition-opacity duration-700 px-4 safe-area-top safe-area-bottom">
+        <div class="text-center w-full max-w-md mx-auto">
+            <h1 class="text-4xl sm:text-5xl md:text-7xl mb-6 md:mb-10 title-font text-pink-200 drop-shadow-lg px-2 leading-tight" style="animation: pulse-soft 2s ease-in-out infinite;">
                 Would you be my Valentine?
             </h1>
             
-            <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-4">
-                <button onclick="handleYes()" class="btn-hover bg-gradient-to-r from-pink-500 to-rose-600 text-white text-xl sm:text-2xl px-8 sm:px-10 py-3 sm:py-4 rounded-full font-bold border-2 border-pink-300 w-full sm:w-auto">
+            <div class="btn-container flex flex-row gap-3 justify-center items-center px-2">
+                <button onclick="handleYes()" class="btn-yes btn-hover bg-gradient-to-r from-pink-500 to-rose-600 text-white font-bold border-2 border-pink-300 shadow-lg">
                     Yes ❤️
                 </button>
                 
-                <button id="no-btn" ontouchstart="moveButton()" onmouseover="moveButton()" onclick="handleNo()" class="bg-gray-700 text-gray-300 text-lg sm:text-xl px-6 sm:px-8 py-3 rounded-full font-semibold border border-gray-500 relative w-full sm:w-auto">
+                <button id="no-btn" ontouchstart="moveButton(event)" onmouseover="moveButton(event)" onclick="handleNo()" class="btn-no bg-gray-700 text-gray-300 font-semibold border border-gray-500 relative">
                     No 💔
                 </button>
             </div>
@@ -262,26 +294,26 @@
     </div>
 
     <!-- PAGE 2: THE MESSAGE -->
-    <div id="page-message" class="hidden-page fixed inset-0 flex-col items-center justify-center z-30 p-4 overflow-y-auto">
-        <div class="glass-panel p-6 sm:p-8 md:p-12 rounded-3xl text-center shadow-2xl relative overflow-hidden border-pink-500/30 my-auto">
+    <div id="page-message" class="hidden-page fixed inset-0 flex-col items-center justify-center z-30 p-3 overflow-y-auto scroll-smooth safe-area-top safe-area-bottom">
+        <div class="glass-panel py-5 px-4 sm:px-6 rounded-2xl text-center shadow-2xl relative overflow-hidden border-pink-500/30 my-auto">
             <!-- Decorative corners -->
-            <div class="decorative-corner absolute top-0 left-0 w-12 sm:w-16 h-12 sm:h-16 border-t-4 border-l-4 border-pink-400 rounded-tl-3xl"></div>
-            <div class="decorative-corner absolute top-0 right-0 w-12 sm:w-16 h-12 sm:h-16 border-t-4 border-r-4 border-pink-400 rounded-tr-3xl"></div>
-            <div class="decorative-corner absolute bottom-0 left-0 w-12 sm:w-16 h-12 sm:h-16 border-b-4 border-l-4 border-pink-400 rounded-bl-3xl"></div>
-            <div class="decorative-corner absolute bottom-0 right-0 w-12 sm:w-16 h-12 sm:h-16 border-b-4 border-r-4 border-pink-400 rounded-br-3xl"></div>
+            <div class="decorative-corner absolute top-0 left-0 w-10 h-10 border-t-3 border-l-3 border-pink-400 rounded-tl-2xl"></div>
+            <div class="decorative-corner absolute top-0 right-0 w-10 h-10 border-t-3 border-r-3 border-pink-400 rounded-tr-2xl"></div>
+            <div class="decorative-corner absolute bottom-0 left-0 w-10 h-10 border-b-3 border-l-3 border-pink-400 rounded-bl-2xl"></div>
+            <div class="decorative-corner absolute bottom-0 right-0 w-10 h-10 border-b-3 border-r-3 border-pink-400 rounded-br-2xl"></div>
 
             <!-- Bouquet of Flowers -->
             <div class="bouquet-container">
                 <div class="bouquet-emoji">💐</div>
-                <div class="sparkle" style="top: 0; left: 15px; animation-delay: 0s;">✨</div>
-                <div class="sparkle" style="top: 5px; right: 20px; animation-delay: 0.5s;">✨</div>
-                <div class="sparkle" style="bottom: 15px; left: 5px; animation-delay: 1s;">✨</div>
-                <div class="sparkle" style="bottom: 5px; right: 15px; animation-delay: 1.5s;">✨</div>
+                <div class="sparkle" style="top: 0; left: 10px; animation-delay: 0s;">✨</div>
+                <div class="sparkle" style="top: 5px; right: 15px; animation-delay: 0.5s;">✨</div>
+                <div class="sparkle" style="bottom: 10px; left: 5px; animation-delay: 1s;">✨</div>
+                <div class="sparkle" style="bottom: 5px; right: 10px; animation-delay: 1.5s;">✨</div>
             </div>
 
-            <h2 class="text-3xl sm:text-5xl md:text-7xl mb-4 sm:mb-8 text-pink-200 title-font drop-shadow-md leading-tight">Buon San Valentino, amore mio! ❤️</h2>
+            <h2 class="text-2xl sm:text-3xl md:text-5xl mb-3 text-pink-200 title-font drop-shadow-md leading-tight">Buon San Valentino, amore mio! ❤️</h2>
             
-            <div class="text-lg sm:text-xl md:text-3xl text-pink-50 message-text space-y-3 sm:space-y-6 relative z-10">
+            <div class="text-base sm:text-lg md:text-2xl text-pink-50 message-text space-y-2 relative z-10">
                 <p class="animate-[fadeIn_2s_ease-out_0.5s_both]">
                     Even though miles separate us, you are always in my heart.
                 </p>
@@ -291,21 +323,22 @@
                 <p class="animate-[fadeIn_2s_ease-out_2.5s_both]">
                     Until then, know that every thought of you makes my day brighter.
                 </p>
-                <p class="text-2xl sm:text-4xl mt-4 sm:mt-8 text-pink-300 font-bold animate-[fadeIn_2s_ease-out_3.5s_both] animate-[glow_3s_infinite]">
+                <p class="text-xl sm:text-2xl md:text-4xl mt-4 text-pink-300 font-bold animate-[fadeIn_2s_ease-out_3.5s_both] animate-[glow_3s_infinite]">
                     Ti amo più di quanto le parole possano dire.
                 </p>
             </div>
         </div>
         
         <!-- Restart button -->
-        <button onclick="resetPage()" class="mt-4 sm:mt-8 text-pink-300 hover:text-white underline opacity-70 hover:opacity-100 transition-opacity text-sm sm:text-base mb-4">
+        <button onclick="resetPage()" class="mt-3 text-pink-300 hover:text-white underline opacity-70 hover:opacity-100 transition-opacity text-sm">
             Replay
         </button>
     </div>
 
     <script>
-        // Detect mobile device
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        // Detect iPhone
+        const isIPhone = /iPhone/.test(navigator.userAgent);
+        const isMobile = /iPhone|iPad|iPod|Android/.test(navigator.userAgent);
         
         // --- Configuration ---
         const heartColors = ['#ff4d6d', '#ff8fa3', '#ffb3c1', '#ffccd5', '#fff0f3'];
@@ -317,8 +350,7 @@
             const heart = document.createElement('div');
             heart.classList.add('heart');
             
-            // Random properties - smaller on mobile
-            const size = Math.random() * (isMobile ? 15 : 20) + (isMobile ? 8 : 10);
+            const size = Math.random() * (isMobile ? 12 : 20) + (isMobile ? 6 : 10);
             const left = Math.random() * 100;
             const duration = Math.random() * 5 + 5;
             const color = heartColors[Math.floor(Math.random() * heartColors.length)];
@@ -328,20 +360,16 @@
             heart.style.left = `${left}%`;
             heart.style.animationDuration = `${duration}s`;
             heart.style.backgroundColor = color;
-            
-            // Create heart shape using CSS
             heart.style.clipPath = 'path("M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z")';
             
             container.appendChild(heart);
             
-            // Remove after animation
             setTimeout(() => {
                 heart.remove();
             }, duration * 1000);
         }
 
-        // Start background hearts - less frequent on mobile for performance
-        setInterval(createHeart, isMobile ? 400 : 300);
+        setInterval(createHeart, isMobile ? 500 : 300);
 
         // --- Interaction Logic ---
 
@@ -349,7 +377,6 @@
             const pageQuestion = document.getElementById('page-question');
             const pageMessage = document.getElementById('page-message');
             
-            // Fade out question
             pageQuestion.style.opacity = '0';
             setTimeout(() => {
                 pageQuestion.style.display = 'none';
@@ -363,17 +390,20 @@
             alert("Are you sure? Think again! 💕");
         }
 
-        function moveButton() {
+        function moveButton(e) {
+            if (e) e.preventDefault();
             const btn = document.getElementById('no-btn');
-            // Smaller movement range on mobile
-            const padding = isMobile ? 20 : 50;
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth - padding);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight - padding);
+            const padding = 16;
+            const maxX = window.innerWidth - btn.offsetWidth - padding;
+            const maxY = window.innerHeight - btn.offsetHeight - padding;
+            
+            const x = Math.random() * maxX + padding/2;
+            const y = Math.random() * maxY + padding/2;
             
             btn.style.position = 'fixed';
-            btn.style.left = `${Math.max(padding/2, x)}px`;
-            btn.style.top = `${Math.max(padding/2, y)}px`;
-            btn.style.transition = 'all 0.3s ease';
+            btn.style.left = `${Math.min(x, maxX)}px`;
+            btn.style.top = `${Math.min(y, maxY)}px`;
+            btn.style.transition = 'all 0.25s ease-out';
             btn.style.zIndex = '50';
         }
 
@@ -383,28 +413,19 @@
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
 
-            // Fewer flowers on mobile
-            const count = isMobile ? 15 : 30;
-
-            for (let i = 0; i < count; i++) {
+            for (let i = 0; i < 12; i++) {
                 setTimeout(() => {
                     const flower = document.createElement('div');
                     flower.textContent = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
                     flower.classList.add('flower');
-                    
-                    // Smaller on mobile
-                    if (isMobile) flower.style.fontSize = '1.5rem';
-                    
-                    // Start at center
                     flower.style.left = `${centerX}px`;
                     flower.style.top = `${centerY}px`;
                     
                     document.body.appendChild(flower);
 
-                    // Explode outwards
                     setTimeout(() => {
                         const angle = Math.random() * Math.PI * 2;
-                        const distance = (Math.random() * (isMobile ? 150 : 300) + (isMobile ? 50 : 100));
+                        const distance = Math.random() * 120 + 60;
                         const tx = Math.cos(angle) * distance;
                         const ty = Math.sin(angle) * distance;
                         
@@ -412,13 +433,12 @@
                         flower.style.opacity = '1';
                     }, 50);
 
-                    // Fade out and remove
                     setTimeout(() => {
                         flower.style.opacity = '0';
                         setTimeout(() => flower.remove(), 1000);
                     }, 2000);
 
-                }, i * 50);
+                }, i * 60);
             }
         }
 
@@ -426,22 +446,19 @@
             location.reload();
         }
 
-        // Handle resize
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                // Reset no button position on resize
+        // Handle orientation change
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
                 const noBtn = document.getElementById('no-btn');
                 if (noBtn.style.position === 'fixed') {
                     noBtn.style.position = 'relative';
                     noBtn.style.left = 'auto';
                     noBtn.style.top = 'auto';
                 }
-            }, 250);
+            }, 300);
         });
 
-        // Prevent double-tap zoom on iOS
+        // Prevent double-tap zoom
         let lastTouchEnd = 0;
         document.addEventListener('touchend', (e) => {
             const now = Date.now();
@@ -449,7 +466,15 @@
                 e.preventDefault();
             }
             lastTouchEnd = now;
-        }, false);
+        }, { passive: false });
+
+        // Prevent zoom on double tap for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                btn.click();
+            }, { passive: false });
+        });
     </script>
 </body>
 </html>
