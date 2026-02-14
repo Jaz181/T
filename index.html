@@ -2,17 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Will You Be My Valentine?</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        body {
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+        
+        html, body {
             margin: 0;
-            overflow: hidden;
+            padding: 0;
+            min-height: 100vh;
+            min-height: 100dvh; /* Dynamic viewport height for mobile */
+            overflow-x: hidden;
             background: #0f0c29;
             background: linear-gradient(to bottom, #240b36, #c31432);
             font-family: 'Playfair Display', serif;
+            touch-action: manipulation;
         }
 
         @keyframes float {
@@ -58,11 +67,15 @@
             opacity: 0;
             transition: all 1s ease-out;
             z-index: 10;
+            pointer-events: none;
         }
 
-        .btn-hover:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(255, 77, 109, 0.6);
+        .btn-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-hover:active {
+            transform: scale(0.95);
         }
 
         .glass-panel {
@@ -70,6 +83,9 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 92%;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .hidden-page {
@@ -93,43 +109,152 @@
 
         .bouquet-container {
             position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 20px;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 15px;
             animation: sway 3s ease-in-out infinite;
         }
 
         .bouquet-emoji {
-            font-size: 150px;
+            font-size: 100px;
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
         }
 
         .sparkle {
             position: absolute;
             color: #ffd700;
-            font-size: 20px;
+            font-size: 16px;
             animation: float 2s linear infinite;
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 640px) {
+            .glass-panel {
+                padding: 1.5rem !important;
+                border-radius: 1.5rem !important;
+            }
+            
+            .glass-panel h2 {
+                font-size: 2.25rem !important;
+                line-height: 1.2 !important;
+                margin-bottom: 1rem !important;
+            }
+            
+            .message-text p {
+                font-size: 1.125rem !important;
+            }
+            
+            .message-text p:last-child {
+                font-size: 1.5rem !important;
+            }
+            
+            #page-question h1 {
+                font-size: 3rem !important;
+                line-height: 1.2 !important;
+                margin-bottom: 2rem !important;
+            }
+            
+            .btn-hover {
+                font-size: 1.25rem !important;
+                padding: 0.75rem 1.5rem !important;
+            }
+            
+            #no-btn {
+                font-size: 1rem !important;
+                padding: 0.5rem 1rem !important;
+            }
+            
+            .decorative-corner {
+                width: 40px !important;
+                height: 40px !important;
+            }
+        }
+
+        /* Small phones */
+        @media (max-width: 380px) {
+            .bouquet-container {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .bouquet-emoji {
+                font-size: 80px;
+            }
+            
+            #page-question h1 {
+                font-size: 2.5rem !important;
+            }
+            
+            .glass-panel h2 {
+                font-size: 1.875rem !important;
+            }
+        }
+
+        /* Landscape mode on mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .bouquet-container {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 10px;
+            }
+            
+            .bouquet-emoji {
+                font-size: 70px;
+            }
+            
+            .glass-panel {
+                padding: 1rem !important;
+            }
+            
+            .glass-panel h2 {
+                font-size: 1.5rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            
+            .message-text p {
+                font-size: 0.875rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            
+            #page-question h1 {
+                font-size: 2rem !important;
+                margin-bottom: 1rem !important;
+            }
+        }
+
+        /* Prevent text selection */
+        .no-select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Better touch targets */
+        button {
+            min-height: 44px;
+            min-width: 44px;
         }
     </style>
 </head>
-<body class="h-screen w-screen relative text-white">
+<body class="relative text-white no-select">
 
     <!-- Background Container for Hearts -->
-    <div id="hearts-container" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+    <div id="hearts-container" class="fixed inset-0 pointer-events-none overflow-hidden"></div>
 
     <!-- PAGE 1: THE QUESTION -->
-    <div id="page-question" class="absolute inset-0 flex flex-col items-center justify-center z-20 transition-opacity duration-700">
-        <div class="text-center p-8 max-w-2xl">
-            <h1 class="text-6xl md:text-8xl mb-12 title-font text-pink-200 drop-shadow-lg animate-pulse">
+    <div id="page-question" class="fixed inset-0 flex flex-col items-center justify-center z-20 transition-opacity duration-700 px-4">
+        <div class="text-center w-full max-w-2xl">
+            <h1 class="text-5xl sm:text-6xl md:text-8xl mb-8 md:mb-12 title-font text-pink-200 drop-shadow-lg animate-pulse px-2">
                 Would you be my Valentine?
             </h1>
             
-            <div class="flex gap-6 justify-center items-center">
-                <button onclick="handleYes()" class="btn-hover bg-gradient-to-r from-pink-500 to-rose-600 text-white text-2xl px-10 py-4 rounded-full font-bold transition-all duration-300 border-2 border-pink-300">
+            <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-4">
+                <button onclick="handleYes()" class="btn-hover bg-gradient-to-r from-pink-500 to-rose-600 text-white text-xl sm:text-2xl px-8 sm:px-10 py-3 sm:py-4 rounded-full font-bold border-2 border-pink-300 w-full sm:w-auto">
                     Yes ❤️
                 </button>
                 
-                <button id="no-btn" onmouseover="moveButton()" onclick="handleNo()" class="bg-gray-700 text-gray-300 text-xl px-8 py-3 rounded-full font-semibold transition-all duration-300 border border-gray-500 relative">
+                <button id="no-btn" ontouchstart="moveButton()" onmouseover="moveButton()" onclick="handleNo()" class="bg-gray-700 text-gray-300 text-lg sm:text-xl px-6 sm:px-8 py-3 rounded-full font-semibold border border-gray-500 relative w-full sm:w-auto">
                     No 💔
                 </button>
             </div>
@@ -137,26 +262,26 @@
     </div>
 
     <!-- PAGE 2: THE MESSAGE -->
-    <div id="page-message" class="hidden-page absolute inset-0 flex-col items-center justify-center z-30 p-4">
-        <div class="glass-panel p-8 md:p-12 rounded-3xl max-w-3xl text-center shadow-2xl relative overflow-hidden border-pink-500/30">
+    <div id="page-message" class="hidden-page fixed inset-0 flex-col items-center justify-center z-30 p-4 overflow-y-auto">
+        <div class="glass-panel p-6 sm:p-8 md:p-12 rounded-3xl text-center shadow-2xl relative overflow-hidden border-pink-500/30 my-auto">
             <!-- Decorative corners -->
-            <div class="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-pink-400 rounded-tl-3xl"></div>
-            <div class="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-pink-400 rounded-tr-3xl"></div>
-            <div class="absolute bottom-0 left-0 w-16 h-16 border-b-4 border-l-4 border-pink-400 rounded-bl-3xl"></div>
-            <div class="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-pink-400 rounded-br-3xl"></div>
+            <div class="decorative-corner absolute top-0 left-0 w-12 sm:w-16 h-12 sm:h-16 border-t-4 border-l-4 border-pink-400 rounded-tl-3xl"></div>
+            <div class="decorative-corner absolute top-0 right-0 w-12 sm:w-16 h-12 sm:h-16 border-t-4 border-r-4 border-pink-400 rounded-tr-3xl"></div>
+            <div class="decorative-corner absolute bottom-0 left-0 w-12 sm:w-16 h-12 sm:h-16 border-b-4 border-l-4 border-pink-400 rounded-bl-3xl"></div>
+            <div class="decorative-corner absolute bottom-0 right-0 w-12 sm:w-16 h-12 sm:h-16 border-b-4 border-r-4 border-pink-400 rounded-br-3xl"></div>
 
             <!-- Bouquet of Flowers -->
             <div class="bouquet-container">
                 <div class="bouquet-emoji">💐</div>
-                <div class="sparkle" style="top: 0; left: 20px; animation-delay: 0s;">✨</div>
-                <div class="sparkle" style="top: 10px; right: 30px; animation-delay: 0.5s;">✨</div>
-                <div class="sparkle" style="bottom: 20px; left: 10px; animation-delay: 1s;">✨</div>
-                <div class="sparkle" style="bottom: 10px; right: 20px; animation-delay: 1.5s;">✨</div>
+                <div class="sparkle" style="top: 0; left: 15px; animation-delay: 0s;">✨</div>
+                <div class="sparkle" style="top: 5px; right: 20px; animation-delay: 0.5s;">✨</div>
+                <div class="sparkle" style="bottom: 15px; left: 5px; animation-delay: 1s;">✨</div>
+                <div class="sparkle" style="bottom: 5px; right: 15px; animation-delay: 1.5s;">✨</div>
             </div>
 
-            <h2 class="text-5xl md:text-7xl mb-8 text-pink-200 title-font drop-shadow-md">Buon San Valentino, amore mio! ❤️</h2>
+            <h2 class="text-3xl sm:text-5xl md:text-7xl mb-4 sm:mb-8 text-pink-200 title-font drop-shadow-md leading-tight">Buon San Valentino, amore mio! ❤️</h2>
             
-            <div class="text-xl md:text-3xl text-pink-50 message-text space-y-6 relative z-10">
+            <div class="text-lg sm:text-xl md:text-3xl text-pink-50 message-text space-y-3 sm:space-y-6 relative z-10">
                 <p class="animate-[fadeIn_2s_ease-out_0.5s_both]">
                     Even though miles separate us, you are always in my heart.
                 </p>
@@ -166,19 +291,22 @@
                 <p class="animate-[fadeIn_2s_ease-out_2.5s_both]">
                     Until then, know that every thought of you makes my day brighter.
                 </p>
-                <p class="text-4xl mt-8 text-pink-300 font-bold animate-[fadeIn_2s_ease-out_3.5s_both] animate-[glow_3s_infinite]">
+                <p class="text-2xl sm:text-4xl mt-4 sm:mt-8 text-pink-300 font-bold animate-[fadeIn_2s_ease-out_3.5s_both] animate-[glow_3s_infinite]">
                     Ti amo più di quanto le parole possano dire.
                 </p>
             </div>
         </div>
         
         <!-- Restart button -->
-        <button onclick="resetPage()" class="mt-8 text-pink-300 hover:text-white underline opacity-70 hover:opacity-100 transition-opacity">
+        <button onclick="resetPage()" class="mt-4 sm:mt-8 text-pink-300 hover:text-white underline opacity-70 hover:opacity-100 transition-opacity text-sm sm:text-base mb-4">
             Replay
         </button>
     </div>
 
     <script>
+        // Detect mobile device
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
         // --- Configuration ---
         const heartColors = ['#ff4d6d', '#ff8fa3', '#ffb3c1', '#ffccd5', '#fff0f3'];
         const flowerEmojis = ['🌹', '🌷', '🌸', '💐', '🌺'];
@@ -189,8 +317,8 @@
             const heart = document.createElement('div');
             heart.classList.add('heart');
             
-            // Random properties
-            const size = Math.random() * 20 + 10;
+            // Random properties - smaller on mobile
+            const size = Math.random() * (isMobile ? 15 : 20) + (isMobile ? 8 : 10);
             const left = Math.random() * 100;
             const duration = Math.random() * 5 + 5;
             const color = heartColors[Math.floor(Math.random() * heartColors.length)];
@@ -212,8 +340,8 @@
             }, duration * 1000);
         }
 
-        // Start background hearts
-        setInterval(createHeart, 300);
+        // Start background hearts - less frequent on mobile for performance
+        setInterval(createHeart, isMobile ? 400 : 300);
 
         // --- Interaction Logic ---
 
@@ -227,24 +355,26 @@
                 pageQuestion.style.display = 'none';
                 pageMessage.classList.remove('hidden-page');
                 pageMessage.classList.add('visible-page');
-                explodeFlowers();
+                if (!isMobile) explodeFlowers();
             }, 700);
         }
 
         function handleNo() {
-            // The "No" button runs away, but if they actually click it (rare), we prompt them
             alert("Are you sure? Think again! 💕");
         }
 
         function moveButton() {
             const btn = document.getElementById('no-btn');
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth - 50);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight - 50);
+            // Smaller movement range on mobile
+            const padding = isMobile ? 20 : 50;
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth - padding);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight - padding);
             
-            btn.style.position = 'absolute';
-            btn.style.left = `${x}px`;
-            btn.style.top = `${y}px`;
+            btn.style.position = 'fixed';
+            btn.style.left = `${Math.max(padding/2, x)}px`;
+            btn.style.top = `${Math.max(padding/2, y)}px`;
             btn.style.transition = 'all 0.3s ease';
+            btn.style.zIndex = '50';
         }
 
         function explodeFlowers() {
@@ -253,11 +383,17 @@
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
 
-            for (let i = 0; i < 30; i++) {
+            // Fewer flowers on mobile
+            const count = isMobile ? 15 : 30;
+
+            for (let i = 0; i < count; i++) {
                 setTimeout(() => {
                     const flower = document.createElement('div');
                     flower.textContent = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
                     flower.classList.add('flower');
+                    
+                    // Smaller on mobile
+                    if (isMobile) flower.style.fontSize = '1.5rem';
                     
                     // Start at center
                     flower.style.left = `${centerX}px`;
@@ -268,7 +404,7 @@
                     // Explode outwards
                     setTimeout(() => {
                         const angle = Math.random() * Math.PI * 2;
-                        const distance = Math.random() * 300 + 100;
+                        const distance = (Math.random() * (isMobile ? 150 : 300) + (isMobile ? 50 : 100));
                         const tx = Math.cos(angle) * distance;
                         const ty = Math.sin(angle) * distance;
                         
@@ -289,6 +425,31 @@
         function resetPage() {
             location.reload();
         }
+
+        // Handle resize
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                // Reset no button position on resize
+                const noBtn = document.getElementById('no-btn');
+                if (noBtn.style.position === 'fixed') {
+                    noBtn.style.position = 'relative';
+                    noBtn.style.left = 'auto';
+                    noBtn.style.top = 'auto';
+                }
+            }, 250);
+        });
+
+        // Prevent double-tap zoom on iOS
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
     </script>
 </body>
 </html>
